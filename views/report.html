@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col-sm-12">
+        <p class="lead">
+            Assuming you worked at the company for {{ analyzeObj.numMonthsAtCompany }} months:
+        </p>
+
+        <p>
+            Using the number of present day shares, you'd have the right to purchase <strong>{{ (100 * analyzeObj.companyPercent)|round(3) }}%</strong> of the company's current outstanding shares.  This is equivalent to {{ analyzeObj.companyBasis|round(1) }} basis points.
+        </p>
+        <p>
+            The full cost to exercise all your options would be {{ analyzeObj.exerciseCost|money }}.
+        </p>
+    </div>
+</div>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">What if machine</h3>
+    </div>
+    <table class="table">
+        <tr>
+            <th>What if...</th>
+            <th>Value of stock options</th>
+            <th>Profit over exercise price</th>
+        </tr>
+        <tr>
+            <td>The valuation stays the same</td>
+            {% set whatIf = valuationScenario(analyzeObj, 1, 1) %}
+            <td>{{ whatIf.optionValue|money }}</td>
+            <td>{{ whatIf.optionProfit|money }}</td>
+        </tr>
+        <tr>
+            <td>The valuation goes up 2.5x with 30% dilution<br><small>You raise a new round of funding!<small></td>
+            {% set whatIf = valuationScenario(analyzeObj, 2.5, 0.7) %}
+            <td>{{ whatIf.optionValue|money }}</td>
+            <td>{{ whatIf.optionProfit|money }}</td>
+        </tr>
+        <tr>
+            <td>The valuation goes up another 2.5x with another 30% dilution<br><small>You raise an even bigger round of funding!<small></td>
+            {% set whatIf = valuationScenario(analyzeObj, 6.25, 0.49) %}
+            <td>{{ whatIf.optionValue|money }}</td>
+            <td>{{ whatIf.optionProfit|money }}</td>
+        </tr>
+    </table>
+<div>

@@ -1,0 +1,387 @@
+<!---
+1. Number of shares
+
+2. Exercise price
+
+2. Total fully diluted outstanding shares
+
+3. Vesting Schedule
+
+4. ISO vs NSO
+
+5. Early Exercise
+
+6. Last Preferred Share Price
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Friendly Options</title>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+        <style>
+            input[type=range] {
+              -webkit-appearance: none;
+              width: 100%;
+              margin: 7.3px 0;
+            }
+            input[type=range]:focus {
+              outline: none;
+            }
+            input[type=range]::-webkit-slider-runnable-track {
+              width: 100%;
+              height: 11.4px;
+              cursor: pointer;
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              background: rgba(48, 113, 169, 0.78);
+              border-radius: 1.3px;
+              border: 0.2px solid #010101;
+            }
+            input[type=range]::-webkit-slider-thumb {
+              box-shadow: 0.9px 0.9px 1px #000031, 0px 0px 0.9px #00004b;
+              border: 1.8px solid #00001e;
+              height: 26px;
+              width: 26px;
+              border-radius: 15px;
+              background: #ffffff;
+              cursor: pointer;
+              -webkit-appearance: none;
+              margin-top: -7.5px;
+            }
+            input[type=range]:focus::-webkit-slider-runnable-track {
+              background: rgba(59, 134, 199, 0.78);
+            }
+            input[type=range]::-moz-range-track {
+              width: 100%;
+              height: 11.4px;
+              cursor: pointer;
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              background: rgba(48, 113, 169, 0.78);
+              border-radius: 1.3px;
+              border: 0.2px solid #010101;
+            }
+            input[type=range]::-moz-range-thumb {
+              box-shadow: 0.9px 0.9px 1px #000031, 0px 0px 0.9px #00004b;
+              border: 1.8px solid #00001e;
+              height: 26px;
+              width: 26px;
+              border-radius: 15px;
+              background: #ffffff;
+              cursor: pointer;
+            }
+            input[type=range]::-ms-track {
+              width: 100%;
+              height: 11.4px;
+              cursor: pointer;
+              background: transparent;
+              border-color: transparent;
+              color: transparent;
+            }
+            input[type=range]::-ms-fill-lower {
+              background: rgba(39, 92, 137, 0.78);
+              border: 0.2px solid #010101;
+              border-radius: 2.6px;
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+            }
+            input[type=range]::-ms-fill-upper {
+              background: rgba(48, 113, 169, 0.78);
+              border: 0.2px solid #010101;
+              border-radius: 2.6px;
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+            }
+            input[type=range]::-ms-thumb {
+              box-shadow: 0.9px 0.9px 1px #000031, 0px 0px 0.9px #00004b;
+              border: 1.8px solid #00001e;
+              height: 26px;
+              width: 26px;
+              border-radius: 15px;
+              background: #ffffff;
+              cursor: pointer;
+              height: 11.4px;
+            }
+            input[type=range]:focus::-ms-fill-lower {
+              background: rgba(48, 113, 169, 0.78);
+            }
+            input[type=range]:focus::-ms-fill-upper {
+              background: rgba(59, 134, 199, 0.78);
+            }
+        </style>
+
+    </head>
+
+	<body>
+		<div class="container">
+
+			<div class="starter-template">
+				<h1>Friendly Options</h1>
+				<p class="lead">Input information about a stock option grant and investigate information about it.</p>
+			</div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Required Info
+                        <small>If you don't have this info, it isn't possible to evaluate the stock option grant</small>
+                    </h3>
+                </div>
+            
+                <div class="panel-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="numOptions" class="col-sm-4 control-label">Number of options</label>
+                            <div class="col-sm-8">
+                                <input type="number" value="9500" class="form-control" id="numOptions">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="numDilutedShares" class="col-sm-4 control-label">Totally Fully Diluted Outstanding Shares</label>
+                            <div class="col-sm-8">
+                                <input type="number" value="100000" class="form-control" id="numDilutedShares">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="strikePrice">Strike Price</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">$</div>
+                                    <input type="number" value="0.005" class="form-control" id="strikePrice">
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="numVestingMonths">Total Vesting Period</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <input type="number" value="48" class="form-control" id="numVestingMonths">
+                                    <div class="input-group-addon">months</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="numVestingCliff">Initial Vesting Cliff</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <input type="number" value="12" class="form-control" id="numVestingCliff">
+                                    <div class="input-group-addon">months</div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Optional Info
+                        <small>For determining the potential value of your stock options, approximations and guesses are fine</small>
+                    </h3>
+                </div>
+            
+                <div class="panel-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="totalValuation">Current Valuation</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">$</div>
+                                    <input type="number" value="1.5" class="form-control" id="totalValuation">
+                                    <div class="input-group-addon">million(s)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="companyStage">Most Recent Completed Funding Round</label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline">
+                                    <input type="radio" name="companyStage" id="companyStagePreSeed" value="preSeed"> No funding
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="companyStage" id="companyStageSeed" value="Seed"> Seed
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="companyStage" id="companyStageAngel" value="Angel"> Angel
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="companyStage" id="companyStageSeriesA" value="SeriesA"> Series A
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="companyStage" id="companyStageSeriesB" value="SeriesB"> Series B/C/D/+
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+                       
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-8">
+                        <button type="submit" id="submit" class="btn btn-default">Generate Report</button>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-sm-5">
+                    <div id="adjust"></div>
+                </div>
+                <div class="col-sm-7">
+                    <div id="result"></div>
+                </div>
+            </div>
+
+		</div><!-- /.container -->
+
+		<!-- Bootstrap core JavaScript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+        <script src="vendor/nunjucks.min.js"></script>
+        <script src="vendor/accounting.min.js"></script>
+
+        <script>
+            var parseForm = function() {
+                numOptions = parseInt($('#numOptions').val(), 10);
+                strikePrice = parseFloat($('#strikePrice').val(), 10);
+                numDilutedShares = parseInt($('#numDilutedShares').val(), 10);
+                numVestingMonths = parseInt($('#numVestingMonths').val(), 10);
+                numVestingCliff = parseInt($('#numVestingCliff').val(), 10);
+
+                totalValuation = parseFloat($('#totalValuation').val(), 10);
+
+                return {
+                    numOptions: numOptions,
+                    strikePrice: strikePrice,
+                    numDilutedShares: numDilutedShares,
+                    numVestingMonths: numVestingMonths,
+                    numVestingCliff: numVestingCliff,
+                    totalValuation: totalValuation
+                }
+            }
+
+            var updateLocation = function(optionObj) {
+            }
+
+            var parseAdjustForm = function() {
+                numMonthsAtCompany = parseInt($('#numMonthsAtCompany').val(), 10);
+
+                return {
+                    numMonthsAtCompany: numMonthsAtCompany,
+                }
+            }
+
+            var analyze = function(optionObj, adjustObj=null) {
+                if (adjustObj.numMonthsAtCompany < optionObj.numVestingCliff) {
+                    vestedShares = 0;
+                } else {
+                    vestedShares = Math.floor(
+                        optionObj.numOptions *
+                        (adjustObj.numMonthsAtCompany / optionObj.numVestingMonths)
+                    )
+                }
+
+                companyPercent = vestedShares / optionObj.numDilutedShares;
+                exerciseCost = vestedShares * optionObj.strikePrice;
+
+                if (optionObj.totalValuation) {
+                    totalValuation = optionObj.totalValuation * 1000000;
+                } else {
+                    totalValuation = null;
+                }
+
+                return {
+                    numMonthsAtCompany: adjustObj.numMonthsAtCompany,
+                    companyPercent: companyPercent,
+                    companyBasis: companyPercent * 10000,
+                    exerciseCost: exerciseCost,
+                    totalValuation: totalValuation
+                }
+            }
+
+            var valuationScenario = function(analyzeObj, increaseMultiple, dilutionMultiple) {
+                value = (
+                    analyzeObj.totalValuation *
+                    analyzeObj.companyPercent *
+                    increaseMultiple *
+                    dilutionMultiple
+                );
+                return {
+                    optionValue: value,
+                    optionProfit: value - analyzeObj.exerciseCost
+                };
+            }
+
+            var env = new nunjucks.Environment(new nunjucks.WebLoader('/views'))
+            env.addGlobal('valuationScenario', valuationScenario);
+            env.addFilter('money', accounting.formatMoney);
+
+            $('#submit').click(function(e) {
+                e.preventDefault();
+
+                optionObj = parseForm();
+
+                $('#adjust').html(
+                    env.render(
+                        'adjustments.html',
+                        {
+                            optionObj: optionObj
+                        }
+                    )
+                );
+
+                adjustObj = parseAdjustForm();
+                analyzeObj = analyze(optionObj, adjustObj);
+
+                $('#result').html(
+                    env.render(
+                        'report.html',
+                        {
+                            optionObj: optionObj,
+                            analyzeObj: analyzeObj,
+                        }
+                    )
+                );
+            });
+
+            $(document).on('change', 'input.update-results-form', function() {
+                optionObj = parseForm();
+                adjustObj = parseAdjustForm();
+
+                analyzeObj = analyze(optionObj, adjustObj);
+
+                $('#result').html(
+                    env.render(
+                        'report.html',
+                        {
+                            optionObj: optionObj,
+                            analyzeObj: analyzeObj,
+                        }
+                    )
+                );
+            });
+        </script>
+	</body>
+</html>
+
