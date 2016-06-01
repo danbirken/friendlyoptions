@@ -416,7 +416,7 @@
                     };
                 }
 
-                var env = new nunjucks.Environment(new nunjucks.WebLoader('/views'))
+                var env = new nunjucks.Environment(new nunjucks.WebLoader('views'))
                 env.addGlobal('valuationScenario', valuationScenario);
                 env.addGlobal('inArray', function (a, b) {
                     return $.inArray(a, b) != -1;
