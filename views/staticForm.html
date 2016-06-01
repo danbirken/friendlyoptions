@@ -1,0 +1,18 @@
+<ul class="list-group">
+    <li class="list-group-item">
+        {{ optionObj.numOptions }} Options @ {{ optionObj.strikePrice|money }} Strike Price,
+        {{ optionObj.numDilutedShares }} Total Fully Diluted Outstanding Shares
+    </li>
+    <li class="list-group-item">
+        {{ optionObj.numVestingMonths }} months to fully vest options after {{ optionObj.numVestingCliff }} month initial cliff
+    </li>
+    <li class="list-group-item">
+        {{ optionObj.optionType }} options with {{ optionObj.optionsExpireValue }} {{ optionObj.optionsExpireScale }} expiration period.  {% if optionObj.earlyExercise %}Options can be exercised early.{% endif %}
+    </li>
+    {% if optionObj.totalValuation and optionObj.companyStage %}
+        <li class="list-group-item">
+            The company is valued at approximated {{ optionObj.totalValuation }} million dollars and is at the {{ optionObj.companyStage }} stage.
+        </li>
+    {% endif %}
+</ul>
+

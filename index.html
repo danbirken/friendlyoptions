@@ -1,19 +1,3 @@
-<!---
-1. Number of shares
-
-2. Exercise price
-
-2. Total fully diluted outstanding shares
-
-3. Vesting Schedule
-
-4. ISO vs NSO
-
-5. Early Exercise
-
-6. Last Preferred Share Price
--->
-
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -30,6 +14,10 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
         <style>
+            .dotted-under {
+                border-bottom: 1px dotted #AAA;
+                text-decoration: none;
+            }
             input[type=range] {
               -webkit-appearance: none;
               width: 100%;
@@ -121,129 +109,202 @@
 
 	<body>
 		<div class="container">
+            <a href="https://github.com/danbirken/friendlyoptions"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
 
 			<div class="starter-template">
 				<h1>Friendly Options</h1>
 				<p class="lead">Input information about a stock option grant and investigate information about it.</p>
 			</div>
 
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        Required Info
-                        <small>If you don't have this info, it isn't possible to evaluate the stock option grant</small>
-                    </h3>
-                </div>
-            
-                <div class="panel-body">
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label for="numOptions" class="col-sm-4 control-label">Number of options</label>
-                            <div class="col-sm-8">
-                                <input type="number" value="9500" class="form-control" id="numOptions">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="numDilutedShares" class="col-sm-4 control-label">Total Fully Diluted Outstanding Shares</label>
-                            <div class="col-sm-8">
-                                <input type="number" value="100000" class="form-control" id="numDilutedShares">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label" for="strikePrice">Strike Price</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <div class="input-group-addon">$</div>
-                                    <input type="number" value="0.005" class="form-control" id="strikePrice">
-                                </div>
-                            </div>
-                        </div>
+            <div id="fullForm">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Required Info
+                        </h3>
+                    </div>
+                
+                    <div class="panel-body">
+                        <p>
+                            In order to begin to evaluate a stock option grant, every piece of
+                            information in this section is required.  Some of it will be found in
+                            your specific stock option grant and some of the information will be
+                            found in the general stock option plan for all employees.
+                        </p>
                         <hr>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label" for="numVestingMonths">Total Vesting Period</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <input type="number" value="48" class="form-control" id="numVestingMonths">
-                                    <div class="input-group-addon">months</div>
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="numOptions" class="col-sm-4 control-label">Number of options</label>
+                                <div class="col-sm-8">
+                                    <input type="number" value="9500" class="form-control" id="numOptions">
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label" for="numVestingCliff">Initial Vesting Cliff</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <input type="number" value="12" class="form-control" id="numVestingCliff">
-                                    <div class="input-group-addon">months</div>
+                            <div class="form-group">
+                                <label for="numDilutedShares" class="col-sm-4 control-label">Total Fully Diluted Outstanding Shares</label>
+                                <div class="col-sm-8">
+                                    <input type="number" value="100000" class="form-control" id="numDilutedShares">
                                 </div>
                             </div>
-                        </div>
-                    </form>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="strikePrice">Strike Price</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">$</div>
+                                        <input type="number" value="0.005" class="form-control" id="strikePrice">
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="numVestingMonths">Total Vesting Period</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <input type="number" value="48" class="form-control" id="numVestingMonths">
+                                        <div class="input-group-addon">months</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="numVestingCliff">Initial Vesting Cliff</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <input type="number" value="12" class="form-control" id="numVestingCliff">
+                                        <div class="input-group-addon">months</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="optionType">Type of options</label>
+                                <div class="col-sm-8">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optionType" id="optionTypeISO" value="ISO"> ISO <a href="https://en.wikipedia.org/wiki/Incentive_stock_option">(info)</a>
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optionType" id="optionTypeNSO" value="NSO"> NSO <a href="https://en.wikipedia.org/wiki/Non-qualified_stock_option">(info)</a>
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optionType" id="optionTypeHybrid" value="ISO/NSO Hybrid"> ISO/NSO Hybrid
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="optionsExpireValue">Options expiration</label>
+                                <div class="col-sm-2">
+                                    <div class="input-group">
+                                        <input type="number" value="90" class="form-control" id="optionsExpireValue">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="optionsExpireScale" id="optionsExpireScaleDays" value="days" checked="checked"> Days</a>
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="optionsExpireScale" id="optionsExpireScaleYears" value="years"> Years</a>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="earlyExercise">Early Exercise</label>
+                                <div class="col-sm-8">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" id="earlyExercise"> Early exercise of options are allowed
+                                        </label>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+
+                        </form>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Optional Info
+                        </h3>
+                    </div>
+                
+                    <div class="panel-body">
+                        <p>
+                            This information is optional, but it will help to estimate potential
+                            outcomes for your stock options.  Approximations and guesses are fine.
+                        </p>
+                        <hr>
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="totalValuation">Current Valuation</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">$</div>
+                                        <input type="number" value="1.5" class="form-control" id="totalValuation">
+                                        <div class="input-group-addon">million(s)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="companyStage">Most Recent Completed Funding Round</label>
+                                <div class="col-sm-8">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="companyStage" id="companyStagePreSeed" value="preSeed"> No funding
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="companyStage" id="companyStageSeed" value="seed"> Seed
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="companyStage" id="companyStageAngel" value="angel"> Angel
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="companyStage" id="companyStageSeriesA" value="seriesA"> Series A
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="companyStage" id="companyStageSeriesB" value="seriesB"> Series B/C/D/+
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        Optional Info
-                        <small>For determining the potential value of your stock options, approximations and guesses are fine</small>
-                    </h3>
-                </div>
-            
-                <div class="panel-body">
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label" for="totalValuation">Current Valuation</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <div class="input-group-addon">$</div>
-                                    <input type="number" value="1.5" class="form-control" id="totalValuation">
-                                    <div class="input-group-addon">million(s)</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label" for="companyStage">Most Recent Completed Funding Round</label>
-                            <div class="col-sm-8">
-                                <label class="radio-inline">
-                                    <input type="radio" name="companyStage" id="companyStagePreSeed" value="preSeed"> No funding
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="companyStage" id="companyStageSeed" value="seed"> Seed
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="companyStage" id="companyStageAngel" value="angel"> Angel
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="companyStage" id="companyStageSeriesA" value="seriesA"> Series A
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="companyStage" id="companyStageSeriesB" value="seriesB"> Series B/C/D/+
-                                </label>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-                       
-            <div class="row">
+                           
+            <div class="row" id="formSubmit">
                 <div class="form-group">
                     <div class="col-sm-offset-4 col-sm-8">
-                        <button type="submit" id="submit" class="btn btn-default">Generate Report</button>
+                        <button type="submit" id="formSubmit" class="btn btn-default">Generate Report</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row" id="formSlideDown" style="display:none;">
+                <div class="col-sm-12">
+                    <div id="staticForm"></div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <button type="submit" id="formSlideDownSubmit" class="btn btn-default">Adjust Information</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <hr>
 
-            <div class="row">
-                <div class="col-sm-5">
+            <div class="row" id="report">
+                <div class="col-sm-12">
                     <div id="adjust"></div>
                 </div>
-                <div class="col-sm-7">
+                <div class="col-sm-12">
                     <div id="result"></div>
                 </div>
             </div>
@@ -261,131 +322,171 @@
         <script src="vendor/nunjucks.min.js"></script>
         <script src="vendor/accounting.min.js"></script>
 
+        <link href="vendor/tipr/tipr.css" rel="stylesheet">
+        <script src="vendor/tipr/tipr.min.js"></script>
+
         <script>
-            var parseForm = function() {
-                var numOptions = parseInt($('#numOptions').val(), 10);
-                var strikePrice = parseFloat($('#strikePrice').val(), 10);
-                var numDilutedShares = parseInt($('#numDilutedShares').val(), 10);
-                var numVestingMonths = parseInt($('#numVestingMonths').val(), 10);
-                var numVestingCliff = parseInt($('#numVestingCliff').val(), 10);
+            $(document).ready(function () {
+                var parseForm = function() {
+                    var numOptions = parseInt($('#numOptions').val(), 10);
+                    var strikePrice = parseFloat($('#strikePrice').val(), 10);
+                    var numDilutedShares = parseInt($('#numDilutedShares').val(), 10);
+                    var numVestingMonths = parseInt($('#numVestingMonths').val(), 10);
+                    var numVestingCliff = parseInt($('#numVestingCliff').val(), 10);
+                    var optionType = $('input[name=optionType]:checked').val();
+                    var earlyExercise = $('#earlyExercise').is(':checked');
 
-                var totalValuation = parseFloat($('#totalValuation').val(), 10);
-                var companyStage = $('input[name=companyStage]:checked').val();
-                
-                return {
-                    numOptions: numOptions,
-                    strikePrice: strikePrice,
-                    numDilutedShares: numDilutedShares,
-                    numVestingMonths: numVestingMonths,
-                    numVestingCliff: numVestingCliff,
-                    totalValuation: totalValuation,
-                    companyStage: companyStage
-                }
-            }
+                    var optionsExpireValue = parseInt($('#optionsExpireValue').val(), 10);
+                    var optionsExpireScale = $('input[name=optionsExpireScale]:checked').val();
 
-            var updateLocation = function(optionObj) {
-            }
+                    var optionsExpireEmployeeFriendly = (
+                        optionsExpireValue >= 5 &&
+                        optionsExpireScale == 'years'
+                    );
 
-            var parseAdjustForm = function() {
-                numMonthsAtCompany = parseInt($('#numMonthsAtCompany').val(), 10);
-
-                return {
-                    numMonthsAtCompany: numMonthsAtCompany,
-                }
-            }
-
-            var analyze = function(optionObj, adjustObj=null) {
-                if (adjustObj.numMonthsAtCompany < optionObj.numVestingCliff) {
-                    vestedShares = 0;
-                } else {
-                    vestedShares = Math.floor(
-                        optionObj.numOptions *
-                        (adjustObj.numMonthsAtCompany / optionObj.numVestingMonths)
-                    )
+                    var totalValuation = parseFloat($('#totalValuation').val(), 10);
+                    var companyStage = $('input[name=companyStage]:checked').val();
+                    
+                    return {
+                        numOptions: numOptions,
+                        strikePrice: strikePrice,
+                        numDilutedShares: numDilutedShares,
+                        numVestingMonths: numVestingMonths,
+                        numVestingCliff: numVestingCliff,
+                        optionType: optionType,
+                        optionsExpireValue: optionsExpireValue,
+                        optionsExpireScale: optionsExpireScale,
+                        optionsExpireEmployeeFriendly: optionsExpireEmployeeFriendly,
+                        earlyExercise: earlyExercise,
+                        totalValuation: totalValuation,
+                        companyStage: companyStage
+                    }
                 }
 
-                companyPercent = vestedShares / optionObj.numDilutedShares;
-                exerciseCost = vestedShares * optionObj.strikePrice;
-
-                if (optionObj.totalValuation) {
-                    totalValuation = optionObj.totalValuation * 1000000;
-                } else {
-                    totalValuation = null;
+                var updateLocation = function(optionObj) {
                 }
 
-                return {
-                    numMonthsAtCompany: adjustObj.numMonthsAtCompany,
-                    companyPercent: companyPercent,
-                    companyBasis: companyPercent * 10000,
-                    exerciseCost: exerciseCost,
-                    totalValuation: totalValuation
+                var parseAdjustForm = function() {
+                    numMonthsAtCompany = parseInt($('#numMonthsAtCompany').val(), 10);
+
+                    return {
+                        numMonthsAtCompany: numMonthsAtCompany,
+                    }
                 }
-            }
 
-            var valuationScenario = function(analyzeObj, increaseMultiple, dilutionMultiple) {
-                companyValue = (
-                    analyzeObj.totalValuation *
-                    increaseMultiple
-                );
-                optionValue = companyValue * analyzeObj.companyPercent * dilutionMultiple;
+                var analyze = function(optionObj, adjustObj=null) {
+                    if (adjustObj.numMonthsAtCompany < optionObj.numVestingCliff) {
+                        vestedShares = 0;
+                    } else {
+                        vestedShares = Math.floor(
+                            optionObj.numOptions *
+                            (adjustObj.numMonthsAtCompany / optionObj.numVestingMonths)
+                        )
+                    }
 
-                return {
-                    companyValue: companyValue,
-                    optionValue: optionValue,
-                    optionProfit: optionValue - analyzeObj.exerciseCost
-                };
-            }
+                    companyPercent = vestedShares / optionObj.numDilutedShares;
+                    exerciseCost = vestedShares * optionObj.strikePrice;
 
-            var env = new nunjucks.Environment(new nunjucks.WebLoader('/views'))
-            env.addGlobal('valuationScenario', valuationScenario);
-            env.addGlobal('inArray', function (a, b) {
-                return $.inArray(a, b) != -1;
-            });
-            env.addFilter('money', accounting.formatMoney);
+                    if (optionObj.totalValuation) {
+                        totalValuation = optionObj.totalValuation * 1000000;
+                    } else {
+                        totalValuation = null;
+                    }
 
-            $('#submit').click(function(e) {
-                e.preventDefault();
+                    return {
+                        numMonthsAtCompany: adjustObj.numMonthsAtCompany,
+                        companyPercent: companyPercent,
+                        companyBasis: companyPercent * 10000,
+                        exerciseCost: exerciseCost,
+                        totalValuation: totalValuation
+                    }
+                }
 
-                optionObj = parseForm();
+                var valuationScenario = function(analyzeObj, increaseMultiple, dilutionMultiple) {
+                    companyValue = (
+                        analyzeObj.totalValuation *
+                        increaseMultiple
+                    );
+                    optionValue = companyValue * analyzeObj.companyPercent * dilutionMultiple;
 
-                $('#adjust').html(
-                    env.render(
-                        'adjustments.html',
-                        {
-                            optionObj: optionObj
-                        }
-                    )
-                );
+                    return {
+                        companyValue: companyValue,
+                        optionValue: optionValue,
+                        optionProfit: optionValue - analyzeObj.exerciseCost
+                    };
+                }
 
-                adjustObj = parseAdjustForm();
-                analyzeObj = analyze(optionObj, adjustObj);
+                var env = new nunjucks.Environment(new nunjucks.WebLoader('/views'))
+                env.addGlobal('valuationScenario', valuationScenario);
+                env.addGlobal('inArray', function (a, b) {
+                    return $.inArray(a, b) != -1;
+                });
+                env.addFilter('money', accounting.formatMoney);
 
-                $('#result').html(
-                    env.render(
-                        'report.html',
-                        {
-                            optionObj: optionObj,
-                            analyzeObj: analyzeObj,
-                        }
-                    )
-                );
-            });
+                $('#formSlideDownSubmit').click(function(e) {
+                    e.preventDefault();
+                    $('#fullForm').slideDown();
+                    $('#formSubmit').show();
+                    $('#formSlideDown').hide();
+                });
 
-            $(document).on('change', 'input.update-results-form', function() {
-                optionObj = parseForm();
-                adjustObj = parseAdjustForm();
+                $('#formSubmit').click(function(e) {
+                    e.preventDefault();
 
-                analyzeObj = analyze(optionObj, adjustObj);
+                    optionObj = parseForm();
 
-                $('#result').html(
-                    env.render(
-                        'report.html',
-                        {
-                            optionObj: optionObj,
-                            analyzeObj: analyzeObj,
-                        }
-                    )
-                );
+                    $('#fullForm').slideUp();
+                    $('#formSubmit').hide();
+                    $('#formSlideDown').show();
+
+                    $('#staticForm').html(
+                        env.render(
+                            'staticForm.html',
+                            {
+                                optionObj: optionObj
+                            }
+                        )
+                    );
+
+                    $('#adjust').html(
+                        env.render(
+                            'adjustments.html',
+                            {
+                                optionObj: optionObj
+                            }
+                        )
+                    );
+
+                    adjustObj = parseAdjustForm();
+                    analyzeObj = analyze(optionObj, adjustObj);
+
+                    $('#result').html(
+                        env.render(
+                            'report.html',
+                            {
+                                optionObj: optionObj,
+                                analyzeObj: analyzeObj,
+                            }
+                        )
+                    );
+                });
+
+                $(document).on('change', 'input.update-results-form', function() {
+                    optionObj = parseForm();
+                    adjustObj = parseAdjustForm();
+
+                    analyzeObj = analyze(optionObj, adjustObj);
+
+                    $('#result').html(
+                        env.render(
+                            'report.html',
+                            {
+                                optionObj: optionObj,
+                                analyzeObj: analyzeObj,
+                            }
+                        )
+                    );
+                });
             });
         </script>
 	</body>

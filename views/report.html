@@ -3,108 +3,155 @@
         <p class="lead">
             Assuming you worked at the company for {{ analyzeObj.numMonthsAtCompany }} months:
         </p>
-
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
         <p>
             Using the number of present day shares, you'd have the right to purchase <strong>{{ (100 * analyzeObj.companyPercent)|round(3) }}%</strong> of the company's current outstanding shares.  This is equivalent to {{ analyzeObj.companyBasis|round(1) }} basis points.
         </p>
         <p>
             The full cost to exercise all your options would be {{ analyzeObj.exerciseCost|money }}.
         </p>
+        {% if optionObj.optionsExpireEmployeeFriendly %}
+            <div class="alert alert-success">
+                <p>
+                    <strong>Your stock options are considered employee friendly when it comes to
+                    options expiration.</strong>
+                </p>
+                <p>
+                    When you leave the company, whether voluntary or not,
+                    you'll have {{ optionObj.optionsExpireValue }} {{ optionObj.optionsExpireScale }}
+                    to decide whether or not to exercise them before they expire.  This means you can
+                    generally wait and see if the company has a successful liquidation event
+                    (acquisition, IPO, etc), and exercise-and-sell your options at that point.
+                </p>
+                <p>
+                    These options are considered employee friendly because you wont have to risk
+                    your money (exercise cost + potential taxes) in order to participate in the
+                    potential upside of the company.
+                </p>
+            </div>
+        {% else %}
+            <div class="alert alert-warning">
+                <p>
+                    <strong>Your stock options will expire {{ optionObj.optionsExpireValue }} {{ optionObj.optionsExpireScale }} after you leave the company, whether voluntary or not.</strong>
+                </p>
+                <p>
+                    You'll need to pay the exercise cost, {{ analyzeObj.exerciseCost|money }},
+                    and <span class="dotted-under tip" data-tip="In some cases you may owe taxes on gains your stock options have made but which are still illiquid.  IE, the value of your stock options have gone up but you can't actually sell them for that price so the gain is on paper only.">potentially some taxes</span> within this period otherwise your options
+                    will expire and you will lose the right to exercise them.
+                </p>
+                <p>
+                    These options are not considered employee friendly because you need to pay
+                    the exercise cost and taxes up-front in order to potentially participate
+                    in future upside of the company.  If the value of the company goes down
+                    in the future it is possible the value of your stock will be worth less
+                    than the amount you spent to exercise your options and get that stock.
+                <p>
+                </p>
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">What if machine</h3>
+            </div>
+            <table class="table">
+                <tr>
+                    <th>What if...</th>
+                    <th>Approx Company Valuation (millions)</th>
+                    <th>Value of stock options</th>
+                    <th>Profit over exercise price</th>
+                </tr>
+                <tr class="active">
+                    <td>Today</td>
+                    {% set whatIf = valuationScenario(analyzeObj, 1, 1) %}
+                    <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
+                    <td>{{ whatIf.optionValue|money }}</td>
+                    <td>{{ whatIf.optionProfit|money }}</td>
+                </tr>
+
+                {% set totalValuationMultiplier = 1 %}
+                {% set totalDilutionMultiplier = 1 %}
+
+                {% if inArray(optionObj.companyStage, ['preSeed']) %}
+                    {% set totalValuationMultiplier = totalValuationMultiplier * 2.5 %}
+                    {% set totalDilutionMultiplier = totalDilutionMultiplier * 0.70 %}
+                    <tr>
+                        <td>You raise a Seed round<br><small>2.5x Valuation Increase, 30% Dilution</small></td>
+                        {% set whatIf = valuationScenario(
+                                analyzeObj, totalValuationMultiplier, totalDilutionMultiplier) %}
+                        <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
+                        <td>{{ whatIf.optionValue|money }}</td>
+                        <td>{{ whatIf.optionProfit|money }}</td>
+                    </tr>
+                {% endif %}
+                {% if inArray(optionObj.companyStage, ['preSeed', 'seed']) %}
+                    {% set totalValuationMultiplier = totalValuationMultiplier * 2.5 %}
+                    {% set totalDilutionMultiplier = totalDilutionMultiplier * 0.70 %}
+                    <tr>
+                        <td>You raise an Angel round<br><small>2.5x Valuation Increase, 30% Dilution</small></td>
+                        {% set whatIf = valuationScenario(
+                                analyzeObj, totalValuationMultiplier, totalDilutionMultiplier) %}
+                        <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
+                        <td>{{ whatIf.optionValue|money }}</td>
+                        <td>{{ whatIf.optionProfit|money }}</td>
+                    </tr>
+                {% endif %}
+                {% if inArray(optionObj.companyStage, ['preSeed', 'seed', 'angel']) %}
+                    {% set totalValuationMultiplier = totalValuationMultiplier * 3 %}
+                    {% set totalDilutionMultiplier = totalDilutionMultiplier * 0.70 %}
+                    <tr>
+                        <td>You raise a Series A round<br><small>3x Valuation Increase, 30% Dilution</small></td>
+                        {% set whatIf = valuationScenario(
+                                analyzeObj, totalValuationMultiplier, totalDilutionMultiplier) %}
+                        <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
+                        <td>{{ whatIf.optionValue|money }}</td>
+                        <td>{{ whatIf.optionProfit|money }}</td>
+                    </tr>
+                {% endif %}
+                {% if inArray(optionObj.companyStage, ['preSeed', 'seed', 'angel', 'seriesA']) %}
+                    {% set totalValuationMultiplier = totalValuationMultiplier * 3 %}
+                    {% set totalDilutionMultiplier = totalDilutionMultiplier * 0.70 %}
+                    <tr>
+                        <td>You raise a Series B round<br><small>3x Valuation Increase, 30% Dilution</small></td>
+                        {% set whatIf = valuationScenario(
+                                analyzeObj, totalValuationMultiplier, totalDilutionMultiplier) %}
+                        <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
+                        <td>{{ whatIf.optionValue|money }}</td>
+                        <td>{{ whatIf.optionProfit|money }}</td>
+                    </tr>
+                {% endif %}
+                {% if inArray(optionObj.companyStage, ['preSeed', 'seed', 'angel', 'seriesA', 'seriesB']) %}
+                    {% set totalValuationMultiplier = totalValuationMultiplier * 4 %}
+                    {% set totalDilutionMultiplier = totalDilutionMultiplier * 0.85 %}
+                    <tr>
+                        <td>You raise a huge growth round<br><small>4x Valuation Increase, 15% Dilution</small></td>
+                        {% set whatIf = valuationScenario(
+                                analyzeObj, totalValuationMultiplier, totalDilutionMultiplier) %}
+                        <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
+                        <td>{{ whatIf.optionValue|money }}</td>
+                        <td>{{ whatIf.optionProfit|money }}</td>
+                    </tr>
+
+                    {% set totalValuationMultiplier = totalValuationMultiplier * 4 %}
+                    {% set totalDilutionMultiplier = totalDilutionMultiplier * 0.85 %}
+                    <tr>
+                        <td>You raise another huge growth round (wow!)<br><small>4x Valuation Increase, 15% Dilution</small></td>
+                        {% set whatIf = valuationScenario(
+                                analyzeObj, totalValuationMultiplier, totalDilutionMultiplier) %}
+                        <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
+                        <td>{{ whatIf.optionValue|money }}</td>
+                        <td>{{ whatIf.optionProfit|money }}</td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
     </div>
 </div>
 
-<div class="panel panel-info">
-    <div class="panel-heading">
-        <h3 class="panel-title">What if machine</h3>
-    </div>
-    <table class="table">
-        <tr>
-            <th>What if...</th>
-            <th>Approx Company Valuation (millions)</th>
-            <th>Value of stock options</th>
-            <th>Profit over exercise price</th>
-        </tr>
-        <tr class="active">
-            <td>Today</td>
-            {% set whatIf = valuationScenario(analyzeObj, 1, 1) %}
-            <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
-            <td>{{ whatIf.optionValue|money }}</td>
-            <td>{{ whatIf.optionProfit|money }}</td>
-        </tr>
-
-        {% set totalValuationMultiplier = 1 %}
-        {% set totalDilutionMultiplier = 1 %}
-
-        {% if inArray(optionObj.companyStage, ['preSeed']) %}
-            {% set totalValuationMultiplier = totalValuationMultiplier * 2.5 %}
-            {% set totalDilutionMultiplier = totalDilutionMultiplier * 0.70 %}
-            <tr>
-                <td>You raise a Seed round<br><small>2.5x Valuation Increase, 30% Dilution</small></td>
-                {% set whatIf = valuationScenario(
-                        analyzeObj, totalValuationMultiplier, totalDilutionMultiplier) %}
-                <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
-                <td>{{ whatIf.optionValue|money }}</td>
-                <td>{{ whatIf.optionProfit|money }}</td>
-            </tr>
-        {% endif %}
-        {% if inArray(optionObj.companyStage, ['preSeed', 'seed']) %}
-            {% set totalValuationMultiplier = totalValuationMultiplier * 2.5 %}
-            {% set totalDilutionMultiplier = totalDilutionMultiplier * 0.70 %}
-            <tr>
-                <td>You raise an Angel round<br><small>2.5x Valuation Increase, 30% Dilution</small></td>
-                {% set whatIf = valuationScenario(
-                        analyzeObj, totalValuationMultiplier, totalDilutionMultiplier) %}
-                <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
-                <td>{{ whatIf.optionValue|money }}</td>
-                <td>{{ whatIf.optionProfit|money }}</td>
-            </tr>
-        {% endif %}
-        {% if inArray(optionObj.companyStage, ['preSeed', 'seed', 'angel']) %}
-            {% set totalValuationMultiplier = totalValuationMultiplier * 3 %}
-            {% set totalDilutionMultiplier = totalDilutionMultiplier * 0.70 %}
-            <tr>
-                <td>You raise a Series A round<br><small>3x Valuation Increase, 30% Dilution</small></td>
-                {% set whatIf = valuationScenario(
-                        analyzeObj, totalValuationMultiplier, totalDilutionMultiplier) %}
-                <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
-                <td>{{ whatIf.optionValue|money }}</td>
-                <td>{{ whatIf.optionProfit|money }}</td>
-            </tr>
-        {% endif %}
-        {% if inArray(optionObj.companyStage, ['preSeed', 'seed', 'angel', 'seriesA']) %}
-            {% set totalValuationMultiplier = totalValuationMultiplier * 3 %}
-            {% set totalDilutionMultiplier = totalDilutionMultiplier * 0.70 %}
-            <tr>
-                <td>You raise a Series B round<br><small>3x Valuation Increase, 30% Dilution</small></td>
-                {% set whatIf = valuationScenario(
-                        analyzeObj, totalValuationMultiplier, totalDilutionMultiplier) %}
-                <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
-                <td>{{ whatIf.optionValue|money }}</td>
-                <td>{{ whatIf.optionProfit|money }}</td>
-            </tr>
-        {% endif %}
-        {% if inArray(optionObj.companyStage, ['preSeed', 'seed', 'angel', 'seriesA', 'seriesB']) %}
-            {% set totalValuationMultiplier = totalValuationMultiplier * 4 %}
-            {% set totalDilutionMultiplier = totalDilutionMultiplier * 0.85 %}
-            <tr>
-                <td>You raise a huge growth round<br><small>4x Valuation Increase, 15% Dilution</small></td>
-                {% set whatIf = valuationScenario(
-                        analyzeObj, totalValuationMultiplier, totalDilutionMultiplier) %}
-                <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
-                <td>{{ whatIf.optionValue|money }}</td>
-                <td>{{ whatIf.optionProfit|money }}</td>
-            </tr>
-
-            {% set totalValuationMultiplier = totalValuationMultiplier * 4 %}
-            {% set totalDilutionMultiplier = totalDilutionMultiplier * 0.85 %}
-            <tr>
-                <td>You raise another huge growth round (wow!)<br><small>4x Valuation Increase, 15% Dilution</small></td>
-                {% set whatIf = valuationScenario(
-                        analyzeObj, totalValuationMultiplier, totalDilutionMultiplier) %}
-                <td>{{ (whatIf.companyValue / 1000000)|round(1) }}</td>
-                <td>{{ whatIf.optionValue|money }}</td>
-                <td>{{ whatIf.optionProfit|money }}</td>
-            </tr>
-        {% endif %}
-    </table>
-<div>
+<script>
+     $('.tip').tipr();
+</script>
