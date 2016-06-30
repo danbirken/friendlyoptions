@@ -392,6 +392,7 @@
                         highlightErrors(errorFields);
                         return null;
                     } else {
+                        clearHighlightErrors();
                         return optionObj;
                     }
                 }
@@ -485,9 +486,13 @@
                     };
                 }
 
-                var highlightErrors = function(errorFields) {
+                var clearHighlightErrors = function() {
                     $('div.form-group').removeClass('has-error');
                     $('div.can-have-error').removeClass('has-error');
+                }
+
+                var highlightErrors = function(errorFields) {
+                    clearHighlightErrors();
                     for (i in errorFields) {
                         $('#' + errorFields[i] + 'Error').addClass('has-error');
                     }
@@ -501,7 +506,7 @@
                 });
                 env.addFilter('money', accounting.formatMoney);
 
-                $(document).on('click', '#formEditValuationSubmit', function(e) {
+                $(document).on('click touchstart', '#formEditValuationSubmit', function(e) {
                     e.preventDefault();
                     $('#fullForm').show();
                     $('#formSubmit').show();
@@ -509,15 +514,14 @@
                     $(window).scrollTo($('#valuationForm'), 500);
                 });
 
-                $('#formSlideDownSubmit').click(function(e) {
+                $(document).on('click touchstart', '#formSlideDownSubmit', function(e) {
                     e.preventDefault();
                     $('#fullForm').slideDown();
                     $('#formSubmit').show();
                     $('#formSlideDown').hide();
                 });
 
-
-                $('#formSubmit').click(function(e) {
+                $(document).on('click touchstart', '#formSubmit', function(e) {
                     e.preventDefault();
 
                     var optionObj = parseForm();
