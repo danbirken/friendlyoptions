@@ -399,14 +399,14 @@
 
                 var parseLocation = function() {
                     if (window.location.hash) {
-                        return JSON.parse(window.location.hash.substring(1));
+                        return JSON.parse(decodeURIComponent(window.location.hash.substring(1)));
                     } else {
                         return null;
                     }
                 }
 
                 var updateLocation = function(optionObj) {
-                    window.location.hash = '#' + JSON.stringify(optionObj);
+                    window.location.hash = '#' + encodeURIComponent(JSON.stringify(optionObj));
                 }
 
                 var updateForm = function(optionObj) {
