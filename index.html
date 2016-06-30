@@ -278,7 +278,7 @@
                 </div>
             </div>
                            
-            <div class="row" id="formSubmit">
+            <div class="row" id="formSubmitGroup">
                 <div class="form-group">
                     <div class="col-sm-offset-4 col-sm-8">
                         <button type="submit" id="formSubmit" class="btn btn-default">Generate Report</button>
@@ -287,7 +287,7 @@
             </div>
 
 
-            <div class="row" id="formSlideDown" style="display:none;">
+            <div class="row" id="formSlideDownGroup" style="display:none;">
                 <div class="col-sm-12">
                     <div id="staticForm"></div>
                     <div class="form-group">
@@ -444,7 +444,7 @@
                     }
                 }
 
-                var analyze = function(optionObj, adjustObj=null) {
+                var analyze = function(optionObj, adjustObj) {
                     if (adjustObj.numMonthsAtCompany < optionObj.numVestingCliff) {
                         vestedShares = 0;
                     } else {
@@ -506,22 +506,22 @@
                 });
                 env.addFilter('money', accounting.formatMoney);
 
-                $(document).on('click touchstart', '#formEditValuationSubmit', function(e) {
+                $(document).on('click', '#formEditValuationSubmit', function(e) {
                     e.preventDefault();
                     $('#fullForm').show();
-                    $('#formSubmit').show();
-                    $('#formSlideDown').hide();
+                    $('#formSubmitGroup').show();
+                    $('#formSlideDownGroup').hide();
                     $(window).scrollTo($('#valuationForm'), 500);
                 });
 
-                $(document).on('click touchstart', '#formSlideDownSubmit', function(e) {
+                $(document).on('click', '#formSlideDownSubmit', function(e) {
                     e.preventDefault();
                     $('#fullForm').slideDown();
-                    $('#formSubmit').show();
-                    $('#formSlideDown').hide();
+                    $('#formSubmitGroup').show();
+                    $('#formSlideDownGroup').hide();
                 });
 
-                $(document).on('click touchstart', '#formSubmit', function(e) {
+                $(document).on('click', '#formSubmit', function(e) {
                     e.preventDefault();
 
                     var optionObj = parseForm();
@@ -533,8 +533,8 @@
                     updateLocation(optionObj);
 
                     $('#fullForm').slideUp();
-                    $('#formSubmit').hide();
-                    $('#formSlideDown').show();
+                    $('#formSubmitGroup').hide();
+                    $('#formSlideDownGroup').show();
 
                     $('#staticForm').html(
                         env.render(
