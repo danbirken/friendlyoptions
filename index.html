@@ -508,17 +508,18 @@
 
                 $(document).on('click', '#formEditValuationSubmit', function(e) {
                     e.preventDefault();
-                    $('#fullForm').show();
-                    $('#formSubmitGroup').show();
-                    $('#formSlideDownGroup').hide();
+                    $('#fullForm').show(0);
+                    $('#formSubmitGroup').show(0);
+                    $('#formSlideDownGroup').hide(0);
                     $(window).scrollTo($('#valuationForm'), 500);
                 });
 
                 $(document).on('click', '#formSlideDownSubmit', function(e) {
                     e.preventDefault();
-                    $('#fullForm').slideDown();
-                    $('#formSubmitGroup').show();
-                    $('#formSlideDownGroup').hide();
+                    $('#fullForm').show(0);
+                    $('#formSubmitGroup').show(0);
+                    $('#formSlideDownGroup').hide(0);
+                    $(window).scrollTo($('#fullForm'), 500);
                 });
 
                 $(document).on('click', '#formSubmit', function(e) {
@@ -532,9 +533,9 @@
 
                     updateLocation(optionObj);
 
-                    $('#fullForm').slideUp();
-                    $('#formSubmitGroup').hide();
-                    $('#formSlideDownGroup').show();
+                    $('#fullForm').hide(0);
+                    $('#formSubmitGroup').hide(0);
+                    $('#formSlideDownGroup').show(0);
 
                     $('#staticForm').html(
                         env.render(
@@ -566,6 +567,8 @@
                             }
                         )
                     );
+
+                    $(window).scrollTo($('#reportStart'), 500);
                 });
 
                 $(document).on('change', 'input.update-results-form', function() {
