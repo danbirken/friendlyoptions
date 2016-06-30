@@ -133,51 +133,51 @@
                         </p>
                         <hr>
                         <form class="form-horizontal">
-                            <div class="form-group">
+                            <div class="form-group" id="numOptionsError">
                                 <label for="numOptions" class="col-sm-4 control-label">Number of options</label>
                                 <div class="col-sm-8">
-                                    <input type="number" value="9500" class="form-control" id="numOptions">
+                                    <input type="number" class="form-control" id="numOptions">
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="numDilutedSharesError">
                                 <label for="numDilutedShares" class="col-sm-4 control-label">Total Fully Diluted Outstanding Shares</label>
                                 <div class="col-sm-8">
-                                    <input type="number" value="100000" class="form-control" id="numDilutedShares">
+                                    <input type="number" class="form-control" id="numDilutedShares">
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="strikePriceError">
                                 <label class="col-sm-4 control-label" for="strikePrice">Strike Price</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <div class="input-group-addon">$</div>
-                                        <input type="number" value="0.005" class="form-control" id="strikePrice">
+                                        <input type="number" class="form-control" id="strikePrice">
                                     </div>
                                 </div>
                             </div>
                             <hr>
-                            <div class="form-group">
+                            <div class="form-group" id="numVestingMonthsError">
                                 <label class="col-sm-4 control-label" for="numVestingMonths">Total Vesting Period</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        <input type="number" value="48" class="form-control" id="numVestingMonths">
+                                        <input type="number" class="form-control" id="numVestingMonths">
                                         <div class="input-group-addon">months</div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="numVestingCliffError">
                                 <label class="col-sm-4 control-label" for="numVestingCliff">Initial Vesting Cliff</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        <input type="number" value="12" class="form-control" id="numVestingCliff">
+                                        <input type="number" class="form-control" id="numVestingCliff">
                                         <div class="input-group-addon">months</div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="optionTypeError">
                                 <label class="col-sm-4 control-label" for="optionType">Type of options</label>
                                 <div class="col-sm-8">
                                     <label class="radio-inline">
@@ -192,17 +192,17 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="optionsExpireValueError">
                                 <label class="col-sm-4 control-label" for="optionsExpireValue">Options expiration</label>
                                 <div class="col-sm-2">
                                     <div class="input-group">
-                                        <input type="number" value="90" class="form-control" id="optionsExpireValue">
+                                        <input type="number" class="form-control" id="optionsExpireValue">
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6 can-have-error" id="optionsExpireScaleError">
                                     <div class="input-group">
                                         <label class="radio-inline">
-                                            <input type="radio" name="optionsExpireScale" id="optionsExpireScaleDays" value="days" checked="checked"> Days</a>
+                                            <input type="radio" name="optionsExpireScale" id="optionsExpireScaleDays" value="days"> Days</a>
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio" name="optionsExpireScale" id="optionsExpireScaleYears" value="years"> Years</a>
@@ -235,7 +235,7 @@
                         </h3>
                     </div>
                 
-                    <div class="panel-body">
+                    <div class="panel-body" id="valuationForm">
                         <p>
                             This information is optional, but it will help to estimate potential
                             outcomes for your stock options.  Approximations and guesses are fine.
@@ -247,7 +247,7 @@
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <div class="input-group-addon">$</div>
-                                        <input type="number" value="1.5" class="form-control" id="totalValuation">
+                                        <input type="number" class="form-control" id="totalValuation">
                                         <div class="input-group-addon">million(s)</div>
                                     </div>
                                 </div>
@@ -321,6 +321,7 @@
 
         <script src="vendor/nunjucks.min.js"></script>
         <script src="vendor/accounting.min.js"></script>
+        <script src="vendor/jquery.scrollTo.min.js"></script>
 
         <link href="vendor/tipr/tipr.css" rel="stylesheet">
         <script src="vendor/tipr/tipr.min.js"></script>
@@ -347,7 +348,7 @@
                     var totalValuation = parseFloat($('#totalValuation').val(), 10);
                     var companyStage = $('input[name=companyStage]:checked').val();
                     
-                    return {
+                    optionObj = {
                         numOptions: numOptions,
                         strikePrice: strikePrice,
                         numDilutedShares: numDilutedShares,
@@ -361,9 +362,77 @@
                         totalValuation: totalValuation,
                         companyStage: companyStage
                     }
+
+                    var requiredNumberFields = [
+                        'numOptions', 'strikePrice', 'numDilutedShares', 'numVestingMonths',
+                        'numVestingCliff', 'optionsExpireValue',
+                    ];
+
+                    var errorFields = [];
+
+                    for (i in requiredNumberFields) {
+                        if (isNaN(optionObj[requiredNumberFields[i]])) {
+                            errorFields.push(requiredNumberFields[i]);
+                        }
+                    }
+
+                    if ($.inArray(optionObj.optionType, ['ISO', 'NSO', 'ISO/NSO Hybrid']) == -1) {
+                        errorFields.push('optionType');
+                    }
+
+                    if ($.inArray(optionObj.earlyExercise, [true, false]) == -1) {
+                        errorFields.push('earlyExercise');
+                    }
+
+                    if ($.inArray(optionObj.optionsExpireScale, ['days', 'years']) == -1) {
+                        errorFields.push('optionsExpireScale');
+                    }
+
+                    if (errorFields.length) {
+                        highlightErrors(errorFields);
+                        return null;
+                    } else {
+                        return optionObj;
+                    }
+                }
+
+                var parseLocation = function() {
+                    if (window.location.hash) {
+                        return JSON.parse(window.location.hash.substring(1));
+                    } else {
+                        return null;
+                    }
                 }
 
                 var updateLocation = function(optionObj) {
+                    window.location.hash = '#' + JSON.stringify(optionObj);
+                }
+
+                var updateForm = function(optionObj) {
+                    $('#numOptions').val(optionObj.numOptions);
+                    $('#strikePrice').val(optionObj.strikePrice);
+                    $('#numDilutedShares').val(optionObj.numDilutedShares);
+                    $('#numVestingMonths').val(optionObj.numVestingMonths);
+                    $('#numVestingCliff').val(optionObj.numVestingCliff);
+                    $('#optionsExpireValue').val(optionObj.optionsExpireValue);
+                    $('#totalValuation').val(optionObj.totalValuation);
+
+                    $('#earlyExercise').prop('checked', optionObj.earlyExercise);
+
+                    checkbox_fields = [
+                        ['optionType', optionObj.optionType],
+                        ['optionsExpireScale', optionObj.optionsExpireScale],
+                        ['companyStage', optionObj.companyStage]
+                    ];
+
+                    $.each(checkbox_fields, function(i, field) {
+                        if (field[1]) {
+                            $('input[name=' + field[0] + ']').prop('checked', false);
+                            $('input[name=' + field[0] + '][value="' + field[1] + '"]').prop(
+                                'checked', true
+                            );
+                        }
+                    });
                 }
 
                 var parseAdjustForm = function() {
@@ -416,12 +485,29 @@
                     };
                 }
 
+                var highlightErrors = function(errorFields) {
+                    $('div.form-group').removeClass('has-error');
+                    $('div.can-have-error').removeClass('has-error');
+                    for (i in errorFields) {
+                        $('#' + errorFields[i] + 'Error').addClass('has-error');
+                    }
+                    $(window).scrollTo($('#' + errorFields[0] + 'Error'), 500);
+                }
+
                 var env = new nunjucks.Environment(new nunjucks.WebLoader('views'))
                 env.addGlobal('valuationScenario', valuationScenario);
                 env.addGlobal('inArray', function (a, b) {
                     return $.inArray(a, b) != -1;
                 });
                 env.addFilter('money', accounting.formatMoney);
+
+                $(document).on('click', '#formEditValuationSubmit', function(e) {
+                    e.preventDefault();
+                    $('#fullForm').show();
+                    $('#formSubmit').show();
+                    $('#formSlideDown').hide();
+                    $(window).scrollTo($('#valuationForm'), 500);
+                });
 
                 $('#formSlideDownSubmit').click(function(e) {
                     e.preventDefault();
@@ -430,10 +516,17 @@
                     $('#formSlideDown').hide();
                 });
 
+
                 $('#formSubmit').click(function(e) {
                     e.preventDefault();
 
-                    optionObj = parseForm();
+                    var optionObj = parseForm();
+
+                    if (optionObj == null) {
+                        return;
+                    }
+
+                    updateLocation(optionObj);
 
                     $('#fullForm').slideUp();
                     $('#formSubmit').hide();
@@ -472,10 +565,15 @@
                 });
 
                 $(document).on('change', 'input.update-results-form', function() {
-                    optionObj = parseForm();
-                    adjustObj = parseAdjustForm();
+                    var optionObj = parseForm();
 
-                    analyzeObj = analyze(optionObj, adjustObj);
+                    if (optionObj == null) {
+                        return;
+                    }
+
+                    var adjustObj = parseAdjustForm();
+
+                    var analyzeObj = analyze(optionObj, adjustObj);
 
                     $('#result').html(
                         env.render(
@@ -487,6 +585,12 @@
                         )
                     );
                 });
+
+                var initialOptionObj = parseLocation();
+                if (initialOptionObj) {
+                    updateForm(initialOptionObj);
+                    $('#formSubmit').click();
+                }
             });
         </script>
 	</body>
